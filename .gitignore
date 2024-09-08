@@ -1,0 +1,4 @@
+/Build/Debug/*
+/Build/Release/*
+
+/ext/*

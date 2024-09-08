@@ -1,12 +1,15 @@
 [submodule "ext/sdl_image"]
 	path = ext/sdl_image
-	url = https://github.com/libsdl-org/SDL_image.git
-[submodule "ext/sdl2"]
-	path = ext/sdl2
-	url = https://github.com/libsdl-org/SDL.git
-[submodule "ext/sdl_ttf"]
-	path = ext/sdl_ttf
-	url = git@github.com:libsdl-org/SDL_ttf.git
+	url = git@github.com/libsdl-org/SDL_image.git
 [submodule "ext/sdl_mixer"]
 	path = ext/sdl_mixer
 	url = git@github.com:libsdl-org/SDL_mixer.git
+[submodule "ext/sdl"]
+	path = ext/sdl
+	url = git@github.com:libsdl-org/SDL.git
+[submodule "ext/stb"]
+	path = ext/stb
+	url = git@github.com:nothings/stb.git
+[submodule "ext/json"]
+	path = ext/json
+	url = git@github.com:nlohmann/json.git
