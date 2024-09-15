@@ -61,12 +61,13 @@ jobs:
         run: |
           cd build
           zip -r ${{ matrix.os }}-build.zip .
-          # Upload artifacts for both platforms
-          - name: Upload build artifact
-            uses: actions/upload-artifact@v3
-            with:
-              name: ${{ matrix.os }}-build
-              path: build/${{ matrix.os }}-build.zip
+
+      # Upload artifacts for both platforms
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-build
+          path: build/${{ matrix.os }}-build.zip
 
   release:
     needs: build  # 在构建完成后触发发布
