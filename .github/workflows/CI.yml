@@ -37,8 +37,6 @@ jobs:
       - name: Read Common.txt
         id: read-common
         run: |
-          pwd
-          ls -al
           CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
           echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
 
