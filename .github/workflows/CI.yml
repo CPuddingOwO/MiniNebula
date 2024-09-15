@@ -1,0 +1,120 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read Common.txt
+        id: read-common
+        run: |
+          CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
+          echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
+
+      - name: Set up LLVM
+        uses: llvm/llvm-project@gha
+        with:
+          version: latest  # Use latest LLVM
+
+      - name: Install dependencies
+        run: sudo apt-get install -y cmake ninja-build
+
+      - name: Configure CMake
+        run: cmake -G Ninja . -B Build/W64 ${{ env.CMAKE_ARGS }}
+
+      - name: Build project
+        run: cmake --build .
+
+      - name: Create release archive
+        run: |
+          mkdir release
+          cp -r Build/U64 release/
+          tar -czvf release-linux.tar.gz release/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-build
+          path: release-linux.tar.gz
+
+  build-windows:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read Common.txt
+        id: read-common
+        run: |
+          CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
+          echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
+
+      - name: Set up LLVM
+        uses: llvm/llvm-project@gha
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+          choco install ninja
+
+      - name: Configure CMake
+        run: cmake -G Ninja -B . Build/W64 ${{ env.CMAKE_ARGS }}
+
+      - name: Build project
+        run: cmake --build .
+
+      - name: Create release archive
+        run: |
+          mkdir release
+          cp -r Build/W64 release/
+          tar -czvf release-windows.tar.gz release/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: release-windows.tar.gz
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-linux, build-windows]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Linux build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build
+          path: ./release
+
+      - name: Download Windows build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build
+          path: ./release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release-linux.tar.gz
+            release-windows.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

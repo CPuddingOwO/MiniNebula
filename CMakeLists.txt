@@ -49,6 +49,7 @@ set(__TEST_FILE
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_BUILD_)
     add_executable(MiniNebula
             ${__SOURCE_FILE}
             ${__DEBUG_FILE}
