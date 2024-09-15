@@ -15,31 +15,32 @@ jobs:
         compiler: [clang]
 
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5  # 设置构建作业的超时为 5 分钟
+    timeout-minutes: 10  # 设置构建作业的超时为 10 分钟
 
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install dependencies (for Linux)
+      # Step 2: Read Common.txt file and export parameters
+      - name: Read Common.txt
+        if: matrix.os == 'ubuntu-latest'
+        id: read-common
+        run: |
+          CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
+          echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
+
+      # Step 3: Install dependencies (for Linux)
       - name: Install dependencies on Linux
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install ninja-build clang
 
-      # Step 3: Install dependencies (for Windows)
+      # Step 4: Install dependencies (for Windows)
       - name: Install dependencies on Windows
         if: matrix.os == 'windows-latest'
         run: |
           choco install ninja
           choco install llvm
-
-      # Step 4: Read Common.txt file and export parameters
-      - name: Read Common.txt
-        id: read-common
-        run: |
-          CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
-          echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
 
       # Step 5: Update Submodules
       - name: Update submodules
