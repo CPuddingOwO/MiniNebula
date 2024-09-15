@@ -1,0 +1,14 @@
+{
+  "mapping": [
+    {
+      "name": "${SceneName}",
+      "id": 0,
+      "map": "path/to/scene1.json"
+    },
+    {
+      "name": "${SceneName}",
+      "id": 1,
+      "map": "path/to/scene2.json"
+    }
+  ]
+}

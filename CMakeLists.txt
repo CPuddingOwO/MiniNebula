@@ -35,7 +35,7 @@ set(__SOURCE_FILE
         src/Sprite.cpp
         src/Timer.cpp
         src/ResourceManager.cpp
-        src/MapManager.cpp
+        src/SceneManager.cpp
         src/CollisionBox.cpp
         src/CollisionManager.cpp
 )

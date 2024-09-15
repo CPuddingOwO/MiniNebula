@@ -11,7 +11,7 @@
 #include <__MiniNebula/__Math.h>
 #include <__MiniNebula/Sprite.h>
 #include <__MiniNebula/ResourceManager.h>
-#include <__MiniNebula/MapManager.h>
+#include <__MiniNebula/SceneManager.h>
 #include <__MiniNebula/CollisionManager.h>
 
 class App {
@@ -34,7 +34,7 @@ private:
     SDL_bool _running = SDL_FALSE;
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;
-    MapManager* mp_i = MapManager::getInstance();
+    SceneManager* mp_i = SceneManager::getInstance();
     ResourceManager* rm_i = ResourceManager::getInstance();
     CollisionManager* cm_i = CollisionManager::getInstance();
 

@@ -2,7 +2,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_mixer/SDL_mixer.h>
-#include <chrono>
 #include <thread>
 
 bool App::init(int argc, char *argv[]) {
@@ -58,7 +57,7 @@ bool App::init(int argc, char *argv[]) {
     rm_i->load();
 
     // Init Map Manager
-    mp_i = MapManager::getInstance();
+    mp_i = SceneManager::getInstance();
     mp_i->load();
 
 
@@ -90,19 +89,19 @@ void App::_render() {
 //    SDL_SetRenderDrawColor( renderer, 55, 148, 110, 255 );
     cm_i->debugRender(renderer);
     SDL_SetRenderDrawColor( renderer, 16, 0, 16, 255 );
-    for (auto& tile : mp_i->getMap(0)->Layer4) {
+    for (auto& tile : mp_i->getScene(0)->Layer4) {
         tile.render(renderer);
     }
-    for (auto& tile : mp_i->getMap(0)->Layer3) {
+    for (auto& tile : mp_i->getScene(0)->Layer3) {
         tile.render(renderer);
     }
-    for (auto& tile : mp_i->getMap(0)->Layer2) {
+    for (auto& tile : mp_i->getScene(0)->Layer2) {
         tile.render(renderer);
     }
-    for (auto& tile : mp_i->getMap(0)->Layer1) {
+    for (auto& tile : mp_i->getScene(0)->Layer1) {
         tile.render(renderer);
     }
-    for (auto& tile : mp_i->getMap(0)->Layer0) {
+    for (auto& tile : mp_i->getScene(0)->Layer0) {
         tile.render(renderer);
     }
 }
@@ -124,11 +123,11 @@ void App::_event() {
         }
         if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
             Vec2<float> mouse_pos = {event.button.x, event.button.y};
-            mp_i->getML_instance()->at(0).Layer0.push_back(MapTile({static_cast<int>(mouse_pos.x / _window_scale.x), static_cast<int>(mouse_pos.y / _window_scale.y)}, rm_i->getAtlasTexture("gfx.alligator.forklift.empty"), {Sprite::Type::Atlas, 4}));
+            mp_i->getML_instance()->at(0).Layer0.push_back(SceneTile({static_cast<int>(mouse_pos.x / _window_scale.x), static_cast<int>(mouse_pos.y / _window_scale.y)}, rm_i->getAtlasTexture("gfx.alligator.forklift.empty"), {Sprite::Type::Atlas, 4}));
         }
         if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_RIGHT) {
             Vec2<float> mouse_pos = {event.button.x, event.button.y};
-            mp_i->getML_instance()->at(0).Layer0.push_back(MapTile({static_cast<int>(mouse_pos.x / _window_scale.x), static_cast<int>(mouse_pos.y / _window_scale.y)}, rm_i->getAtlasTexture("gfx.alligator.forklift.full"), {Sprite::Type::Atlas, 4}));
+            mp_i->getML_instance()->at(0).Layer0.push_back(SceneTile({static_cast<int>(mouse_pos.x / _window_scale.x), static_cast<int>(mouse_pos.y / _window_scale.y)}, rm_i->getAtlasTexture("gfx.alligator.forklift.full"), {Sprite::Type::Atlas, 4}));
         }
     }
 }

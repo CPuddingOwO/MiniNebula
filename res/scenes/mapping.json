@@ -1,0 +1,9 @@
+{
+  "mapping": [
+    {
+      "name": "${SceneName}",
+      "id": 0,
+      "map": "res/scenes/scene1.json"
+    }
+  ]
+}
