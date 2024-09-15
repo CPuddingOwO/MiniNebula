@@ -15,6 +15,7 @@ jobs:
         compiler: [clang]
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5  # 设置构建作业的超时为 5 分钟
 
     steps:
       # Step 1: Checkout the repository
