@@ -43,7 +43,7 @@ jobs:
       # Step 5: Configure CMake
       - name: Configure CMake
         run: |
-          cmake -G Ninja -B build -S . ${{ env.CMAKE_ARGS }}
+          cmake -G Ninja -B build -S .. ${{ env.CMAKE_ARGS }}
 
       # Step 6: Build the project
       - name: Build with Ninja
