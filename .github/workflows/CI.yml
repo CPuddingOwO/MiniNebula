@@ -25,7 +25,7 @@ jobs:
       # Step 2: Read Common.txt file and export parameters
       - name: Read Common.txt for Linux
         if: matrix.os == 'ubuntu-latest'
-        id: read-common
+        id: read-common-linux
         run: |
           CMAKE_ARGS=$(cat Scripts/Common.txt | xargs)
           echo "CMAKE_ARGS=$CMAKE_ARGS" >> $GITHUB_ENV
@@ -33,7 +33,7 @@ jobs:
       # Step 2: Read Common.txt file and export parameters on windows
       - name: Read Common.txt for Windows
         if: matrix.os == 'windows-latest'
-        id: read-common
+        id: read-common-windows
         run: |
           setlocal enabledelayedexpansion
           set CMAKE_ARGS=
