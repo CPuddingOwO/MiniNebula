@@ -1,12 +1,19 @@
-@echo false
+@echo off
 
 cd ..
 
-if not exist Build mkdir Build
+setlocal enabledelayedexpansion
+set CMAKE_ARGS=
+for /f "usebackq delims=" %%i in ("./Scripts/Common.txt") do (
+    set "CMAKE_ARGS=!CMAKE_ARGS! %%i"
+)
+
+cmake -G "Ninja" -B Build %CMAKE_ARGS%
+
+cmake --build Build
+
 cd Build
 
-cmake -G "Ninja" -B W64 @../Scripts/Common.txt
+if not exist compiled mkdir compiled
 
-cd W64
 
-ninja

@@ -41,6 +41,10 @@ jobs:
         run: |
           choco install ninja
           choco install llvm
+          curl -L -o w64devkit.zip https://github.com/skeeto/w64devkit/releases/download/v1.17.0/w64devkit-1.17.0.zip
+          7z x w64devkit.zip -oD:/w64devkit
+          echo "w64devkit installed"
+          echo "D:/w64devkit/bin" >> $GITHUB_PATH
 
       # Step 5: Update Submodules
       - name: Update submodules
@@ -56,18 +60,14 @@ jobs:
         run: |
           cmake --build build
 
-      # Step 8: Package artifacts (optional)
-      - name: Create release package
-        run: |
-          cd build
-          zip -r ${{ matrix.os }}-build.zip .
-
       # Upload artifacts for both platforms
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.os }}-build
-          path: build/${{ matrix.os }}-build.zip
+          name: MiniNebula-${{ matrix.os }}-${{ github.ref_name }}
+          path: build/*
+#          path: build/compiled/*
+
 
   release:
     needs: build  # 在构建完成后触发发布
