@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(SDLIMAGE_BUILD_SHARED_LIBS ON)
 set(SDLMIXER_BUILD_SHARED_LIBS ON)
-
+set(SDL_SHARED ON)
+set(SDL_STATIC OFF)
 
 add_subdirectory(ext/sdl)       # RENDERER
 add_subdirectory(ext/sdl_image) # IMAGE
@@ -63,8 +64,42 @@ endif()
 
 set(TARGET_COMPILED_DIR ${CMAKE_BINARY_DIR}/compiled/)
 
+#macro(copy_subproject_target target)
+#    add_custom_command(TARGET ${target} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E make_directory ${TARGET_COMPILED_DIR}
+#            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${target}> ${TARGET_COMPILED_DIR}
+#            COMMENT "Copying ${target} files to output directory"
+#    )
+#endmacro()
+
+#copy_subproject_target(MiniNebula)
+#copy_subproject_target(${sdl3_image_target_name})
+#copy_subproject_target(${sdl3_mixer_target_name})
+#if ( SDL_SHARED )
+#    copy_subproject_target(SDL3::SDL3-shared)
+#endif()
+set(APP_SHARED_LIB_PREFIX_NAME ".so")
+set(APP_PREFIX_NAME "")
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(APP_SHARED_LIB_PREFIX_NAME ".dll")
+    set(APP_PREFIX_NAME ".exe")
+endif ()
+
+
+add_custom_command(TARGET MiniNebula POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${TARGET_COMPILED_DIR}/res/
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/MiniNebula${APP_PREFIX_NAME} ${TARGET_COMPILED_DIR}/MiniNebula${APP_PREFIX_NAME}
+
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl/SDL3${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3${APP_SHARED_LIB_PREFIX_NAME}
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_image/SDL3_image${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3_image${APP_SHARED_LIB_PREFIX_NAME}
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_mixer/SDL3_mixer${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3_mixer${APP_SHARED_LIB_PREFIX_NAME}
+)
+
+
 #execute_process( COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${TARGET_COMPILED_DIR}/res/)
-#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/MiniNebula.exe ${TARGET_COMPILED_DIR}/MiniNebula)
-#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl/SDL3.dll ${TARGET_COMPILED_DIR}/SDL3.dll)
-#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_image/SDL3_image.dll ${TARGET_COMPILED_DIR}/SDL3_image.dll)
-#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_mixer/SDL3_mixer.dll ${TARGET_COMPILED_DIR}/SDL3_mixer.dll)
+#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/MiniNebula${APP_PREFIX_NAME} ${TARGET_COMPILED_DIR}/MiniNebula${APP_PREFIX_NAME})
+#
+#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl/SDL3${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3${APP_SHARED_LIB_PREFIX_NAME})
+#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_image/SDL3_image${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3_image${APP_SHARED_LIB_PREFIX_NAME})
+#execute_process( COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/ext/sdl_mixer/SDL3_mixer${APP_SHARED_LIB_PREFIX_NAME} ${TARGET_COMPILED_DIR}/SDL3_mixer${APP_SHARED_LIB_PREFIX_NAME})

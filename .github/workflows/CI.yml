@@ -74,14 +74,15 @@ jobs:
       - name: Build with Ninja
         run: |
           cmake --build build
+          zip MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip build/compiled/*
 
       # Upload artifacts for both platforms
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: MiniNebula-${{ matrix.os }}-${{ github.ref_name }}
-          path: build/*
-#          path: build/compiled/*
+#          path: build/*
+          path: build/compiled/*
 
 
   release:
@@ -98,7 +99,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build/ubuntu-latest-build.zip
-            build/windows-latest-build.zip
+            build/MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
