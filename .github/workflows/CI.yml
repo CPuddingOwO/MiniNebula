@@ -41,6 +41,7 @@ jobs:
         run: |
           choco install ninja
           choco install llvm
+          choco install directx-sdk
           curl -L -o w64devkit.zip https://github.com/skeeto/w64devkit/releases/download/v1.17.0/w64devkit-1.17.0.zip
           7z x w64devkit.zip -oD:/w64devkit
           echo "w64devkit installed"
@@ -62,7 +63,7 @@ jobs:
 
       # Upload artifacts for both platforms
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MiniNebula-${{ matrix.os }}-${{ github.ref_name }}
           path: build/*
