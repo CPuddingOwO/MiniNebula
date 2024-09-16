@@ -91,20 +91,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MiniNebula-${{ matrix.os }}-${{ github.ref_name }}
-#          path: build/*
           path: build/compiled/*
 
-
-  release:
-    needs: build  # 在构建完成后触发发布
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Step 2: Create release
+      # Step 9: Release
       - name: Upload Release
         uses: softprops/action-gh-release@v1
         with:
