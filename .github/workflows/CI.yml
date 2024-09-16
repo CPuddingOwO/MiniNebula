@@ -73,7 +73,18 @@ jobs:
       - name: Build with Ninja
         run: |
           cmake --build build
+
+      # Step 8: Compress build artifacts On Linux
+      - name: Compress build artifacts on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
           zip build/MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip build/compiled/*
+
+      # Step 8: Compress build artifacts On Windows
+      - name: Compress build artifacts on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          Compress-Archive -Path "build/compiled/*" -DestinationPath "build/MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip"
 
       # Upload artifacts for both platforms
       - name: Upload build artifact
