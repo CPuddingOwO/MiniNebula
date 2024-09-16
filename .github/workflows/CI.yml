@@ -35,12 +35,12 @@ jobs:
         if: matrix.os == 'windows-latest'
         id: read-common-windows
         run: |
-          setlocal enabledelayedexpansion
-          set CMAKE_ARGS=
-          for /f "usebackq delims=" %%i in ("./Scripts/Common.txt") do (
-            set "CMAKE_ARGS=!CMAKE_ARGS! %%i"
-          )
-          echo "CMAKE_ARGS=!CMAKE_ARGS!" >> $env:GITHUB_ENV
+          $CMAKE_ARGS = ""
+          Get-Content "./Scripts/Common.txt" | ForEach-Object {
+          $CMAKE_ARGS += " $_"
+          }
+          echo "CMAKE_ARGS=$CMAKE_ARGS" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+
 
       # Step 3: Install dependencies (for Linux)
       - name: Install dependencies on Linux
