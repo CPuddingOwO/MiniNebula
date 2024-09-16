@@ -74,7 +74,7 @@ jobs:
       - name: Build with Ninja
         run: |
           cmake --build build
-          zip MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip build/compiled/*
+          zip build/MiniNebula-${{ matrix.os }}-${{ github.ref_name }}.zip build/compiled/*
 
       # Upload artifacts for both platforms
       - name: Upload build artifact
